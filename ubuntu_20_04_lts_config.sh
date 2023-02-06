@@ -20,7 +20,7 @@ Upgrade()
 # config file path
 default_path=$(eval "pwd")
 cd ~
-config_path=~/OneDrive/personnel/software/linux/configs
+config_path=~/OneDrive/personnel/software/linux/dotfiles
 
 # replace config files with those in config folder
 Config()
@@ -191,7 +191,7 @@ ZShell_powerlevel10k()
 ## Other software
 Other()
 {
-    options=("Shutter" "Ranger" "Mocp" "Git" "cUrl" "Flatpak" "Viu")
+    options=("Shutter" "Ranger" "Mocp" "Git" "cUrl" "Flatpak" "Viu" "CBonsai")
     menu
 }
 
@@ -245,6 +245,19 @@ Viu()
     apt-get install cargo
     message "information" "Installing viu"
     cargo install viu
+}
+
+CBonsai()
+{
+    message "information" "Updating"
+    apt update
+    message "information" "Installing cbonsai"
+    apt install build-essential git pkgconf
+    apt install libncurses6 libncurses-dev ncurses-base ncurses-bin
+    git clone https://gitlab.com/jallbrit/cbonsai
+    cd cbonsai
+    make install PREFIX=~/.local
+    cd
 }
 
 # main
