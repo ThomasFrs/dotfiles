@@ -1,2 +1,2 @@
 # dotfiles
-My dotfiles (config files)
+![example](example.png)
