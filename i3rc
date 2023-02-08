@@ -3,12 +3,12 @@ set $center move position center
 
 ### COLORS #####################################
 
-set $bg-color #262626
-set $inactive-bg-color #262626
-set $text-color #AFAFAF
-set $inactive-text-color #828997
-set $urgent-text #BE5046
-set $indicator-color #262626
+set $bg-color #32302F
+set $inactive-bg-color #282828
+set $text-color #EBDBB2
+set $inactive-text-color #A89984
+set $urgent-text #FB4934
+set $indicator-color #FABD2F
 
 				#border			background		text			indicator
 client.focused			$bg-color		$bg-color		$text-color 		$indicator-color
@@ -179,8 +179,10 @@ default_border none
 default_floating_border pixel 0
 gaps inner 20 # gap between windows
 gaps outer 20 # gap around windows at all times, cant be higher than inner gap
-#bindsym $mod+h gaps outer current plus 5
-#bindsym $mod+j gaps outer current minus 5
+bindsym $mod+Shift+g gaps outer current minus 5
+bindsym $mod+Shift+h gaps outer current plus 5
+bindsym $mod+Shift+v gaps inner current minus 5
+bindsym $mod+Shift+b gaps inner current plus 5
 #border_radius 20
 
 # Activate smart borders (always)
@@ -234,9 +236,9 @@ bar {
     font pango:Inconsolata 10
     tray_output none
     status_command ~/.config/i3/bumblebee-status/bumblebee-status \
-    -m mocp pasink pasource nic sensors memory battery-upower time\
-    -p mocp.format=' %artist - %song' root.path=/ memory.format='{percent:05.02f}%' nic.exclude='eno1, lo' nic.format='{ssid} {strength}' time.format="%D %H:%M:%S"\
-    -t modded-onedark-powerline
+    -m mocp pasink nic sensors memory battery-upower time\
+    -p mocp.format=' %artist - %song' root.path=/ memory.format='{percent:05.02f}%' nic.exclude='eno1, lo' nic.format='{ssid} {strength}' time.format="%D %H:%M"\
+    -t gruvbox
     
     colors {
 		background $bg-color
@@ -259,5 +261,5 @@ bar {
 #exec_always source ~/.fehbg
 #bindsym $mod+shift+x exec betterlockscreen -l dim
 
-exec_always feh --bg-fill ~/OneDrive/personnel/photos/wallpapers-computer/fallout_ascii_wallpaper.png
+exec_always feh --bg-fill ~/OneDrive/personnel/photos/wallpapers-computer/celeste_summit.png
 

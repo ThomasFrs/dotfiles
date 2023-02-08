@@ -103,7 +103,7 @@ StartInMusicDir = yes
 
 # Set playback toggles.
 #Repeat = no
-#Shuffle = no
+Shuffle = yes
 #AutoNext = yes
 
 # Default FormatString:

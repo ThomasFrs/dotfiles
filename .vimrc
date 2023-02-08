@@ -165,13 +165,15 @@ let g:vimwiki_list = [{'path': '~/OneDrive/personnel/software/git/Vimwiki',
 			\'ext': '.md'}]
 
 "   vim airline & vim airline theme
-let g:airline_theme='onedark'
+let g:airline_theme='gruvbox'
 let g:airline#extensions#whitespace#enabled=0
 let g:airline_powerline_fonts=1 " enable powerline fonts
 set noshowmode " dont show things like --INSERT--
 
+colorscheme onedark
+set termguicolors
 "   awesome vim colorschemes
-colorscheme onedark " happy_hacking
+colorscheme gruvbox " onedark happy_hacking
 
 "   nerdtree
 nnoremap <Leader>x :NERDTreeToggle %<CR> " toggle NerdTree
