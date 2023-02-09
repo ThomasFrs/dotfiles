@@ -1,5 +1,5 @@
 #!/bin/bash
-# Config file to run to install libraries, packages for a new quick session on Ubuntu 20.04LTS
+# Config file to run to install libraries, packages and pretty much configure anything for a new quick session on Ubuntu 20.04LTS
 
 # colors
 RED='\033[0;31m'
@@ -8,10 +8,16 @@ GREEN='\033[1;32m'
 NC='\033[0m'
 
 # update packages
-Upgrade()
+Update()
 {
     message "information" "Updating"
     apt-get update
+    menu
+}
+
+# upgrade packages
+Upgrade()
+{
     message "information" "Upgrading"
     apt-get upgrade
     menu
@@ -23,7 +29,7 @@ cd ~
 config_path=~/OneDrive/personnel/software/linux/dotfiles
 
 # replace config files with those in config folder
-Config()
+UpdateConfig()
 {
     message "information" "Updating config files"
     message "information" "Updating ~/.config/i3/config"
@@ -47,8 +53,33 @@ Config()
     menu
 }
 
+# replace files in the config folder with normals
+FetchConfig()
+{
+    message "information" "Fetching config files"
+    message "information" "Fetching ~/.config/i3/config"
+    cp -rf ~/.config/i3/config ${config_path}/i3rc
+    message "information" "Fetching ~/.config/betterlockscreen/betterlockscreenrc"
+    cp -rf ~/.config/betterlockscreen/betterlockscreenrc ${config_path}/betterlockscreenrc 
+    message "information" "Fetching ~/.vimrc"
+    cp -rf ~/.vimrc ${config_path}/.vimrc 
+    message "information" "Fetching ~/.zshrc"
+    cp -rf ~/.zshrc ${config_path}/.zshrc 
+    message "information" "Fetching ~/.moc/config"
+    cp -rf ~/.moc/config ${config_path}/mocrc 
+    message "information" "Fetching ~/.moc/keymap.example"
+    cp -rf ~/.moc/keymap.example ${config_path}/mockeymap.example 
+    message "information" "Fetching ~/.config/ranger/rc.conf"
+    cp -rf ~/.config/ranger/rc.conf ${config_path}/rc.conf 
+    message "information" "Fetching ~/.gitconfig"
+    cp -rf ~/.gitconfig ${config_path}/.gitconfig 
+    message "information" "Fetching ~/.config/i3/bumblebee-status/themes/modded-onedark-powerline.json"
+    cp -rf ~/.config/i3/bumblebee-status/themes/modded-onedark-powerline.json ${config_path}/modded-onedark-powerline.json 
+    menu
+}
+
 # fonts
-Fonts()
+InstallFonts()
 {
     message "information" "Installing Font-Awesome"
     git clone https://github.com/FortAwesome/Font-Awesome.git
@@ -61,6 +92,12 @@ Fonts()
 }
 
 # packages
+Packages()
+{
+    options=("OneDrive" "i3" "Vim" "ZShell" "Shutter" "Ranger" "Mocp" "Git" "cUrl" "Flatpak" "Viu" "CBonsai" "TLP-Powertop")
+    menu
+}
+
 ## onedrive
 OneDrive()
 {
@@ -119,8 +156,10 @@ i3Blocks()
 ### betterlockscreen
 i3BetterLockScreen()
 {
-    message "information" "Installing i3lock-color"
     #### i3 lock color
+    message "information" "Installing x11-utils"
+    apt-get install x11-utils
+    message "information" "Installing i3lock-color"
     apt install autoconf gcc make pkg-config libpam0g-dev libcairo2-dev libfontconfig1-dev libxcb-composite0-dev libev-dev libx11-xcb-dev libxcb-xkb-dev libxcb-xinerama0-dev libxcb-randr0-dev libxcb-image0-dev libxcb-util-dev libxcb-xrm-dev libxkbcommon-dev libxkbcommon-x11-dev libjpeg-dev
     git clone https://github.com/Raymo111/i3lock-color.git
     message "information" "Building i3lock-color"
@@ -128,7 +167,11 @@ i3BetterLockScreen()
 
     message "information" "Installing betterlockscreen"
     # you might need to download manually imagemagick mapimage https://imagemagick.org/script/download.php
-    wget https://raw.githubusercontent.com/betterlockscreen/betterlockscreen/main/install.sh -O - -q | bash -s user
+    wget https://github.com/betterlockscreen/betterlockscreen/archive/refs/heads/main.zip
+    unzip main.zip
+
+    chmod u+x betterlockscreen-main/betterlockscreen
+    cp betterlockscreen-main/betterlockscreen /usr/local/bin/
     mkdir -p ~/.config/betterlockscreen/
     menu
 }
@@ -188,13 +231,6 @@ ZShell_powerlevel10k()
     menu
 }
 
-## Other software
-Other()
-{
-    options=("Shutter" "Ranger" "Mocp" "Git" "cUrl" "Flatpak" "Viu" "CBonsai")
-    menu
-}
-
 ## shutter
 Shutter()
 {
@@ -237,6 +273,7 @@ Flatpak()
     sudo apt install flatpak
     sudo apt install gnome-software-plugin-flatpak
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    menu
 }
 
 Viu()
@@ -245,6 +282,7 @@ Viu()
     apt-get install cargo
     message "information" "Installing viu"
     cargo install viu
+    menu
 }
 
 CBonsai()
@@ -258,6 +296,21 @@ CBonsai()
     cd cbonsai
     make install PREFIX=~/.local
     cd
+    menu
+}
+
+TLP-Powertop()
+{
+    # reduces battery usage
+    # tlp-stat to check it
+    message "information" "Installing TLP"
+    apt-get install tlp tlp-rdw
+    systemctl enable tlp
+    message "information" "Disabling screensavers"
+    echo "xset s off" >> $HOME/.xsession
+    message "information" "Installing powertop"
+    apt install powertop
+    home
 }
 
 # main
@@ -280,7 +333,7 @@ menu()
     select opt in "Home" "${options[@]}" "Quit"
     do
         case "$REPLY" in
-            1) options=("Upgrade" "Config" "Fonts" "OneDrive" "i3" "Vim" "ZShell" "Other"); menu;;
+            1) options=("Update" "Upgrade" "UpdateConfig" "FetchConfig" "InstallFonts" "Packages"); menu;;
             [1-$((${#options[@]}+1))])
                 choice=$(expr $REPLY-2);
                 ${options[$choice]};;
@@ -290,5 +343,5 @@ menu()
     done
 }
 
-options=("Upgrade" "Config" "Fonts" "OneDrive" "i3" "Vim" "ZShell" "Other")
+options=("Update" "Upgrade" "UpdateConfig" "FetchConfig" "InstallFonts" "Packages")
 menu
